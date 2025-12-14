@@ -1,0 +1,464 @@
+/* ==============================================
+   Self-Adaptive Model Selector - Modern Minimal CSS
+   ============================================== */
+
+/* === Reset & Base Styles === */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #4a90e2;
+    --primary-hover: #357abd;
+    --secondary-color: #6c757d;
+    --success-color: #28a745;
+    --error-color: #dc3545;
+    --bg-light: #f5f7fa;
+    --bg-white: #ffffff;
+    --text-dark: #2c3e50;
+    --text-muted: #6c757d;
+    --border-color: #e1e8ed;
+    --shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    --shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.12);
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+    line-height: 1.6;
+    color: var(--text-dark);
+    background-color: var(--bg-light);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* === Navigation === */
+.navbar {
+    background: var(--bg-white);
+    box-shadow: var(--shadow);
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.logo:hover {
+    color: var(--primary-hover);
+}
+
+/* === Hero Section === */
+.hero {
+    text-align: center;
+    padding: 80px 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.hero-title {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    animation: fadeInDown 0.8s;
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+    opacity: 0.95;
+    animation: fadeInUp 0.8s;
+}
+
+/* === Buttons === */
+.btn {
+    display: inline-block;
+    padding: 12px 30px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin: 5px;
+}
+
+.btn-primary {
+    background: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+}
+
+.btn-secondary {
+    background: var(--secondary-color);
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+}
+
+.btn-large {
+    padding: 16px 40px;
+    font-size: 1.1rem;
+}
+
+/* === Features Section === */
+.features {
+    padding: 60px 20px;
+    background: var(--bg-white);
+}
+
+.section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    color: var(--text-dark);
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.feature-card {
+    background: var(--bg-light);
+    padding: 2rem;
+    border-radius: 12px;
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+}
+
+.feature-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.feature-card h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+    color: var(--primary-color);
+}
+
+.feature-card p {
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
+/* === How It Works === */
+.how-it-works {
+    padding: 60px 20px;
+    background: var(--bg-light);
+}
+
+.steps {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.step {
+    background: var(--bg-white);
+    padding: 2rem;
+    border-radius: 12px;
+    text-align: center;
+    min-width: 200px;
+    box-shadow: var(--shadow);
+}
+
+.step-number {
+    width: 50px;
+    height: 50px;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 auto 1rem;
+}
+
+.step-arrow {
+    font-size: 2rem;
+    color: var(--primary-color);
+}
+
+/* === Upload Section === */
+.upload-section {
+    min-height: 70vh;
+    padding: 60px 20px;
+    display: flex;
+    align-items: center;
+}
+
+.upload-card {
+    background: var(--bg-white);
+    padding: 3rem;
+    border-radius: 16px;
+    box-shadow: var(--shadow-hover);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.upload-title {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-dark);
+}
+
+.upload-description {
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+}
+
+/* === Form Styles === */
+.upload-form {
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-dark);
+}
+
+.file-input-wrapper {
+    position: relative;
+}
+
+.file-input {
+    width: 100%;
+    padding: 12px;
+    border: 2px dashed var(--border-color);
+    border-radius: 8px;
+    background: var(--bg-light);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.file-input:hover {
+    border-color: var(--primary-color);
+    background: white;
+}
+
+.form-help {
+    display: block;
+    margin-top: 0.5rem;
+    color: var(--text-muted);
+    font-size: 0.875rem;
+}
+
+.form-errors {
+    margin-top: 0.5rem;
+}
+
+.error-message {
+    color: var(--error-color);
+    font-size: 0.875rem;
+    margin: 0.25rem 0;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+/* === Success State === */
+.success-message {
+    text-align: center;
+    padding: 2rem;
+}
+
+.success-icon {
+    width: 80px;
+    height: 80px;
+    background: var(--success-color);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    margin: 0 auto 1.5rem;
+}
+
+.success-message h3 {
+    color: var(--success-color);
+    margin-bottom: 1rem;
+}
+
+.file-path {
+    color: var(--text-muted);
+    word-break: break-all;
+    margin: 1rem 0;
+}
+
+/* === Info Box === */
+.info-box {
+    background: var(--bg-light);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid var(--primary-color);
+}
+
+.info-box h4 {
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+}
+
+.info-box ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.info-box li {
+    padding: 0.5rem 0;
+    color: var(--text-muted);
+}
+
+.info-box li:before {
+    content: "✓ ";
+    color: var(--primary-color);
+    font-weight: 700;
+    margin-right: 0.5rem;
+}
+
+/* === Messages === */
+.messages-container {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    z-index: 1000;
+    max-width: 400px;
+}
+
+.message {
+    padding: 1rem 1.5rem;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    box-shadow: var(--shadow-hover);
+    animation: slideInRight 0.3s;
+}
+
+.message-success {
+    background: var(--success-color);
+    color: white;
+}
+
+.message-error {
+    background: var(--error-color);
+    color: white;
+}
+
+/* === Footer === */
+footer {
+    background: var(--text-dark);
+    color: white;
+    text-align: center;
+    padding: 2rem 0;
+    margin-top: auto;
+}
+
+/* === Animations === */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* === Responsive === */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .section-title {
+        font-size: 1.75rem;
+    }
+    
+    .feature-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .steps {
+        flex-direction: column;
+    }
+    
+    .step-arrow {
+        transform: rotate(90deg);
+    }
+    
+    .upload-card {
+        padding: 2rem 1.5rem;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .btn {
+        width: 100%;
+    }
+}

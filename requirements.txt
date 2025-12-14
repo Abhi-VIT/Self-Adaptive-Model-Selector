@@ -1,0 +1,9 @@
+pandas
+numpy<2
+scikit-learn
+scipy
+statsmodels
+pytest
+shap
+xgboost
+django

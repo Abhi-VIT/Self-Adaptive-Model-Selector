@@ -1,0 +1,387 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="results-section">
+    <div class="container">
+        <div class="results-header">
+            <h1>📊 Analysis Results</h1>
+            <p class="dataset-name">Dataset: <strong>{{ uploaded_file }}</strong></p>
+        </div>
+
+        <!-- Dataset Information -->
+        <div class="result-card">
+            <h2>📁 Dataset Information</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="label">Problem Type:</span>
+                    <span class="value">{{ dataset_info.problem_type|title }}</span>
+                </div>
+                {% if dataset_info.classification_type %}
+                <div class="info-item">
+                    <span class="label">Classification Type:</span>
+                    <span class="value">{{ dataset_info.classification_type|title }}</span>
+                </div>
+                {% endif %}
+                <div class="info-item">
+                    <span class="label">Samples:</span>
+                    <span class="value">{{ dataset_info.n_samples }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Features:</span>
+                    <span class="value">{{ dataset_info.n_features }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Missing Data:</span>
+                    <span class="value">{{ dataset_info.missing_percentage|floatformat:2 }}%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recommended Model -->
+        <div class="result-card highlight">
+            <h2>🎯 Recommended Model</h2>
+            <div class="model-recommendation">
+                <div class="model-name">{{ selected_model }}</div>
+                <p class="training-time">Training Time: {{ training_time|floatformat:2 }}s</p>
+            </div>
+
+            <h3>Model Confidence</h3>
+            <div class="confidence-bars">
+                {% for model, conf in confidence.items %}
+                <div class="confidence-item">
+                    <span class="model-label">{{ model }}</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: {{ conf|floatformat:0|add:" %" }}"></div>
+                    </div>
+                    <span class="conf-value">{{ conf|floatformat:1 }}%</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Performance Metrics -->
+        <div class="result-card">
+            <h2>📈 Performance Metrics</h2>
+            <div class="metrics-grid">
+                {% for metric, value in metrics.items %}
+                <div class="metric-card">
+                    <div class="metric-name">{{ metric|upper }}</div>
+                    <div class="metric-value">{{ value|floatformat:4 }}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Why This Model? -->
+        <div class="result-card">
+            <h2>💡 Why This Model?</h2>
+
+            <h3>Data Characteristics Detected:</h3>
+            <ul class="explanation-list">
+                {% for reason in sys_explanation.data_characteristics %}
+                <li>{{ reason }}</li>
+                {% empty %}
+                <li>Standard dataset characteristics detected</li>
+                {% endfor %}
+            </ul>
+
+            <h3>Model Strengths:</h3>
+            <ul class="explanation-list">
+                {% for strength in sys_explanation.model_strengths %}
+                <li>{{ strength }}</li>
+                {% endfor %}
+            </ul>
+
+            <h3>Key Meta-Features:</h3>
+            <div class="meta-features">
+                {% for feature in sys_explanation.key_meta_features %}
+                <span class="badge">{{ feature }}</span>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Feature Importance -->
+        {% if shap_results.feature_importance %}
+        <div class="result-card">
+            <h2>🔍 Feature Importance</h2>
+            <div class="feature-importance">
+                {% for feature, importance in shap_results.feature_importance.items|slice:":10" %}
+                <div class="feature-bar">
+                    <span class="feature-label">{{ feature }}</span>
+                    <div class="importance-bar">
+                        <div class="importance-fill" style="width: {{ importance|floatformat:0|add:" %" }}"></div>
+                    </div>
+                    <span class="importance-value">{{ importance|floatformat:4 }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Hyperparameters -->
+        {% if best_params %}
+        <div class="result-card">
+            <h2>⚙️ Best Hyperparameters</h2>
+            <div class="params-grid">
+                {% for param, value in best_params.items %}
+                <div class="param-item">
+                    <span class="param-name">{{ param }}:</span>
+                    <span class="param-value">{{ value }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Actions -->
+        <div class="result-actions">
+            <a href="{% url 'upload' %}" class="btn btn-primary">Analyze Another Dataset</a>
+            <a href="{% url 'home' %}" class="btn btn-secondary">Back to Home</a>
+        </div>
+    </div>
+</section>
+
+<style>
+    .results-section {
+        padding: 40px 20px;
+        min-height: 80vh;
+    }
+
+    .results-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .results-header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .dataset-name {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+    }
+
+    .result-card {
+        background: var(--bg-white);
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+        margin-bottom: 2rem;
+    }
+
+    .result-card.highlight {
+        border: 2px solid var(--primary-color);
+        background: linear-gradient(135deg, rgba(74, 144, 226, 0.05) 0%, rgba(255, 255, 255, 1) 100%);
+    }
+
+    .result-card h2 {
+        margin-bottom: 1.5rem;
+        color: var(--primary-color);
+        font-size: 1.5rem;
+    }
+
+    .result-card h3 {
+        margin: 1.5rem 0 1rem;
+        font-size: 1.1rem;
+    }
+
+    .info-grid,
+    .metrics-grid,
+    .params-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+
+    .info-item,
+    .param-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.75rem;
+        background: var(--bg-light);
+        border-radius: 8px;
+    }
+
+    .label,
+    .param-name {
+        font-weight: 600;
+        color: var(--text-dark);
+    }
+
+    .value,
+    .param-value {
+        color: var(--primary-color);
+        font-weight: 700;
+    }
+
+    .model-recommendation {
+        text-align: center;
+        padding: 2rem;
+        background: var(--bg-light);
+        border-radius: 12px;
+        margin-bottom: 2rem;
+    }
+
+    .model-name {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 0.5rem;
+    }
+
+    .training-time {
+        color: var(--text-muted);
+    }
+
+    .confidence-bars {
+        margin-top: 1rem;
+    }
+
+    .confidence-item {
+        display: grid;
+        grid-template-columns: 200px 1fr 80px;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .model-label {
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .progress-bar {
+        height: 30px;
+        background: var(--bg-light);
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--primary-color) 0%, var(--primary-hover) 100%);
+        transition: width 1s ease;
+    }
+
+    .conf-value {
+        text-align: right;
+        font-weight: 700;
+        color: var(--primary-color);
+    }
+
+    .metrics-grid {
+        gap: 1.5rem;
+    }
+
+    .metric-card {
+        text-align: center;
+        padding: 1.5rem;
+        background: var(--bg-light);
+        border-radius: 8px;
+    }
+
+    .metric-name {
+        font-size: 0.875rem;
+        color: var(--text-muted);
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .metric-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--primary-color);
+    }
+
+    .explanation-list {
+        list-style: none;
+        padding-left: 0;
+    }
+
+    .explanation-list li {
+        padding: 0.75rem 0;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .explanation-list li:before {
+        content: "✓ ";
+        color: var(--success-color);
+        font-weight: 700;
+        margin-right: 0.5rem;
+    }
+
+    .meta-features {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .badge {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        background: var(--primary-color);
+        color: white;
+        border-radius: 20px;
+        font-size: 0.875rem;
+        font-weight: 600;
+    }
+
+    .feature-importance,
+    .feature-bar {
+        margin-bottom: 10rem;
+    }
+
+    .feature-bar {
+        display: grid;
+        grid-template-columns: 150px 1fr 100px;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .feature-label {
+        font-size: 0.875rem;
+        font-weight: 600;
+    }
+
+    .importance-bar {
+        height: 20px;
+        background: var(--bg-light);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .importance-fill {
+        height: 100%;
+        background: var(--success-color);
+    }
+
+    .importance-value {
+        text-align: right;
+        font-size: 0.875rem;
+        color: var(--text-muted);
+    }
+
+    .result-actions {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 3rem;
+    }
+
+    @media (max-width: 768px) {
+
+        .confidence-item,
+        .feature-bar {
+            grid-template-columns: 1fr;
+            text-align: center;
+        }
+
+        .info-grid,
+        .metrics-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}

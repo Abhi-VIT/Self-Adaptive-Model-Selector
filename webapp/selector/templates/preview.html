@@ -1,0 +1,255 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="preview-section">
+    <div class="container">
+        <div class="preview-header">
+            <h1>📊 Dataset Preview</h1>
+            <p class="file-name">File: <strong>{{ file_name }}</strong></p>
+            <p class="dataset-size">{{ n_rows }} rows × {{ n_cols }} columns</p>
+        </div>
+
+        <!-- Column Information -->
+        <div class="info-card">
+            <h2>📋 Column Information</h2>
+            <div class="column-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Column Name</th>
+                            <th>Data Type</th>
+                            <th>Non-Null</th>
+                            <th>Missing</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for col in column_info %}
+                        <tr>
+                            <td><strong>{{ col.name }}</strong></td>
+                            <td><span class="dtype-badge">{{ col.dtype }}</span></td>
+                            <td>{{ col.non_null }}</td>
+                            <td>{{ col.null }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Dataset Preview -->
+        <div class="preview-card">
+            <h2>👁️ Dataset Preview (First 10 rows)</h2>
+            <div class="table-container">
+                {{ preview_html|safe }}
+            </div>
+        </div>
+
+        <!-- Target Column Selection -->
+        <div class="selection-card">
+            <h2>🎯 Select Target Column</h2>
+            <p class="selection-help">Choose the column you want to predict</p>
+
+            <form method="post" action="{% url 'analyze' %}" class="selection-form">
+                {% csrf_token %}
+                <div class="column-selector">
+                    {% for column in columns %}
+                    <div class="column-option">
+                        <input type="radio" name="target_column" value="{{ column }}" id="col_{{ forloop.counter }}" {% if forloop.first %}checked{% endif %}>
+                        <label for="col_{{ forloop.counter }}">
+                            <span class="column-name">{{ column }}</span>
+                        </label>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary btn-large">🚀 Start Analysis</button>
+                    <a href="{% url 'upload' %}" class="btn btn-secondary">Upload Different File</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<style>
+    .preview-section {
+        padding: 40px 20px;
+        min-height: 80vh;
+    }
+
+    .preview-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .preview-header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .file-name {
+        font-size: 1.1rem;
+        color: var(--text-muted);
+        margin: 0.5rem 0;
+    }
+
+    .dataset-size {
+        font-size: 1rem;
+        color: var(--primary-color);
+        font-weight: 600;
+    }
+
+    .info-card,
+    .preview-card,
+    .selection-card {
+        background: var(--bg-white);
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+        margin-bottom: 2rem;
+    }
+
+    .info-card h2,
+    .preview-card h2,
+    .selection-card h2 {
+        margin-bottom: 1.5rem;
+        color: var(--primary-color);
+        font-size: 1.5rem;
+    }
+
+    .column-table {
+        overflow-x: auto;
+    }
+
+    .column-table table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .column-table th {
+        background: var(--bg-light);
+        padding: 12px;
+        text-align: left;
+        font-weight: 600;
+        border-bottom: 2px solid var(--border-color);
+    }
+
+    .column-table td {
+        padding: 12px;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .dtype-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        background: var(--primary-color);
+        color: white;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    .table-container {
+        overflow-x: auto;
+        margin-top: 1rem;
+    }
+
+    .table-container table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.875rem;
+    }
+
+    .table-container th {
+        background: var(--primary-color);
+        color: white;
+        padding: 10px;
+        text-align: left;
+        position: sticky;
+        top: 0;
+    }
+
+    .table-container td {
+        padding: 8px 10px;
+        border: 1px solid var(--border-color);
+    }
+
+    .table-container tr:nth-child(even) {
+        background: var(--bg-light);
+    }
+
+    .table-container tr:hover {
+        background: rgba(74, 144, 226, 0.1);
+    }
+
+    .selection-help {
+        color: var(--text-muted);
+        margin-bottom: 1.5rem;
+    }
+
+    .column-selector {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .column-option {
+        position: relative;
+    }
+
+    .column-option input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+    }
+
+    .column-option label {
+        display: block;
+        padding: 1rem;
+        background: var(--bg-light);
+        border: 2px solid var(--border-color);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-align: center;
+    }
+
+    .column-option input[type="radio"]:checked+label {
+        background: var(--primary-color);
+        color: white;
+        border-color: var(--primary-color);
+        transform: scale(1.05);
+    }
+
+    .column-option label:hover {
+        border-color: var(--primary-color);
+        transform: translateY(-2px);
+    }
+
+    .column-name {
+        font-weight: 600;
+        font-size: 0.95rem;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-top: 2rem;
+    }
+
+    @media (max-width: 768px) {
+        .column-selector {
+            grid-template-columns: 1fr;
+        }
+
+        .form-actions {
+            flex-direction: column;
+        }
+
+        .btn {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}

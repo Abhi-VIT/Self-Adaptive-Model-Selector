@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container">
+        <h1 class="hero-title">Self-Adaptive Model Selector</h1>
+        <p class="hero-subtitle">Automatically selects the best ML/DL model for your dataset</p>
+        <a href="{% url 'upload' %}" class="btn btn-primary btn-large">Get Started</a>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features">
+    <div class="container">
+        <h2 class="section-title">Key Features</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🔍</div>
+                <h3>Automatic Detection</h3>
+                <p>Automatically detects problem type: regression, classification, or time-series</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Statistical Analysis</h3>
+                <p>Extracts 8 meta-features including VIF, skewness, and data characteristics</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🧠</div>
+                <h3>Intelligent Recommendation</h3>
+                <p>Uses meta-learning to recommend the optimal model for your data</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">💡</div>
+                <h3>Explainable AI</h3>
+                <p>Provides SHAP-based explanations and clear reasoning for model selection</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section class="how-it-works">
+    <div class="container">
+        <h2 class="section-title">How It Works</h2>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h4>Upload Dataset</h4>
+                <p>Upload your CSV file</p>
+            </div>
+            <div class="step-arrow">→</div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h4>Analysis</h4>
+                <p>System analyzes data characteristics</p>
+            </div>
+            <div class="step-arrow">→</div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h4>Get Results</h4>
+                <p>Receive model recommendations with explanations</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
